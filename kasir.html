@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kasir – Keday 70</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#e2a925"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <link rel="apple-touch-icon" href="icons/icon.svg"/>
+</head>
+<body class="app-page">
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="logo-sm">K<span>70</span></div>
+    <div>
+      <div class="topbar-title">Kasir</div>
+      <div class="topbar-sub" id="cabangLabel">–</div>
+    </div>
+  </div>
+  <div class="topbar-center">
+    <div class="time-display" id="timeDisplay"></div>
+  </div>
+  <div class="topbar-right">
+    <div class="user-chip" id="userChip"></div>
+    <button class="btn-icon" onclick="window.location='index.html'" title="Logout">⏻</button>
+  </div>
+</header>
+
+<div class="kasir-layout">
+
+  <!-- LEFT: MENU PANEL -->
+  <aside class="menu-panel">
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" id="searchMenu" placeholder="Cari menu..." oninput="filterMenu()"/>
+    </div>
+
+    <div class="category-tabs" id="categoryTabs"></div>
+
+    <div class="menu-grid" id="menuGrid"></div>
+  </aside>
+
+  <!-- RIGHT: ORDER PANEL -->
+  <aside class="order-panel">
+
+    <!-- Table selector -->
+    <div class="table-select-bar">
+      <span class="ts-label">🪑 Meja</span>
+      <div class="table-btns" id="tableBtns"></div>
+      <button class="btn-qr" onclick="openQRModal()" title="QR Order">📱 QR</button>
+    </div>
+
+    <!-- Order items -->
+    <div class="order-items" id="orderItems">
+      <div class="empty-order">
+        <div style="font-size:3rem">🍜</div>
+        <div>Belum ada pesanan</div>
+        <div style="font-size:.8rem;opacity:.5">Pilih menu di sebelah kiri</div>
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="order-note">
+      <input type="text" id="orderNote" placeholder="📝 Catatan pesanan (opsional)..."/>
+    </div>
+
+    <!-- Summary -->
+    <div class="order-summary">
+      <div class="summary-row"><span>Subtotal</span><span id="subtotal">Rp 0</span></div>
+      <div class="summary-row total"><span>TOTAL</span><span id="totalAmt">Rp 0</span></div>
+    </div>
+
+    <div class="order-actions">
+      <button class="btn-clear" onclick="clearOrder()">🗑 Bersihkan</button>
+      <button class="btn-send" onclick="sendOrder()">Kirim ke Dapur 👨‍🍳</button>
+    </div>
+    <button class="btn-print" onclick="printStruk()">🖨️ Cetak Struk</button>
+
+  </aside>
+</div>
+
+<!-- QR MODAL -->
+<div class="modal-overlay" id="qrModal" style="display:none">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>QR Code Pemesanan Mandiri</h3>
+      <button onclick="closeQRModal()">✕</button>
+    </div>
+    <div class="qr-instructions">
+      <p>Tamu scan QR di bawah untuk pesan dari meja mereka sendiri</p>
+    </div>
+    <div class="table-qr-grid" id="tableQRGrid"></div>
+    <button class="btn-print-qr" onclick="printQRCodes()">🖨️ Cetak Semua QR</button>
+  </div>
+</div>
+
+<!-- STRUK MODAL -->
+<div class="modal-overlay" id="strukModal" style="display:none">
+  <div class="modal-card struk-modal">
+    <div class="modal-header">
+      <h3>Preview Struk</h3>
+      <button onclick="closeStrukModal()">✕</button>
+    </div>
+    <div class="struk-preview" id="strukPreview"></div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn-send" onclick="doPrint()" style="flex:1">🖨️ Print</button>
+      <button class="btn-clear" onclick="closeStrukModal()" style="flex:1">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/kasir.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").then(()=>console.log("SW registered")).catch(e=>console.log("SW error:",e));}</script>
+</body>
+</html>
